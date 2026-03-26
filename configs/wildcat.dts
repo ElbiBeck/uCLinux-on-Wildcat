@@ -1,0 +1,46 @@
+/dts-v1/;
+
+/ {
+	#address-cells = <0x01>;
+	#size-cells = <0x01>;
+	compatible = "riscv-minimal-nommu,wildcat";
+	model = "riscv-minimal-nommu,wildcat";
+
+	chosen {
+		bootargs = "earlycon=uart8250,mmio32,0xf0000000 console=ttyS0";
+		stdout-path = "serial0:115200n8";
+	};
+
+	memory@0 {
+        device_type = "memory";
+        reg = <0x00000000 0x10000000>;
+    };
+
+	cpus {
+		#address-cells = <0x01>;
+		#size-cells = <0x00>;
+
+		cpu@0 {
+			device_type = "cpu";
+			reg = <0x00>;
+			status = "okay";
+			compatible = "riscv";
+			riscv,isa = "rv32i";
+			mmu-type = "riscv,none";
+		};
+	};
+
+	soc {
+		#address-cells = <0x01>;
+		#size-cells = <0x01>;
+		compatible = "simple-bus";
+		ranges;
+
+		serial0: serial@f0000000 {
+            compatible = "ns16550a";
+            reg = <0xf0000000 0x100>;
+            clock-frequency = <10000000>;
+            current-speed = <115200>;
+        };
+	};
+};
