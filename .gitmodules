@@ -1,3 +1,6 @@
 [submodule "buildroot"]
 	path = buildroot
 	url = git@github.com:buildroot/buildroot.git
+[submodule "wildcat"]
+	path = wildcat
+	url = git@github.com:NiQu05/wildcat.git
