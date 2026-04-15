@@ -1,11 +1,15 @@
-IMAGE     := wildcat
-VOLUME    := buildroot-output
-BR2_OPTS  := -C buildroot/ O=output
+WILDCAT_IMAGE  := wildcat
+SBT_IMAGE      := sbtscala/scala-sbt:graalvm-community-21.0.2_1.12.9_3.8.3
+VOLUME         := buildroot-output
+BR2_OPTS       := -C buildroot/ O=output
+WILDCAT        := -C wildcat/
+IMAGE_PATH     := ../output/images/boot.bin
 
 DOCKER_RUN = docker run -it \
 	-v $(CURDIR):/app \
 	-v $(VOLUME):/build \
-	$(IMAGE)
+	-w /app \
+ $(1)
 
 # Native
 
@@ -23,22 +27,28 @@ build:
 	make $(BR2_OPTS) defconfig BR2_DEFCONFIG=../configs/wildcat_defconfig
 	make $(BR2_OPTS)
 
+run:
+	make $(WILDCAT) run PROGRAM=$(IMAGE_PATH)
+
 clean:
 	make $(BR2_OPTS) clean
 
 # Docker wrappers
 
 docker_build:
-	docker build -t $(IMAGE) .
+	docker build -t $(WILDCAT_IMAGE) .
 
 docker_edit: docker_build
-	$(DOCKER_RUN) edit
+	$(call DOCKER_RUN,$(WILDCAT_IMAGE)) make edit
 
 docker_linux: docker_build
-	$(DOCKER_RUN) edit_linux
+	$(call DOCKER_RUN,$(WILDCAT_IMAGE)) make edit_linux
 
 docker_build_fw: docker_build
-	$(DOCKER_RUN) build
+	$(call DOCKER_RUN, $(WILDCAT_IMAGE)) make build
+
+docker_run:
+	$(call DOCKER_RUN,$(SBT_IMAGE)) make run
 
 docker_clean: docker_build
 	$(DOCKER_RUN) clean
