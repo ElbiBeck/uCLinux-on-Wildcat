@@ -1,6 +1,9 @@
 # Custom
 output/
 *.DS_Store
+.vscode/
+.metals/
+.scalafmt.conf
 
 # Prerequisites
 *.d

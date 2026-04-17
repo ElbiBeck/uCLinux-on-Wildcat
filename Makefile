@@ -30,6 +30,9 @@ build:
 run:
 	make $(WILDCAT) run PROGRAM=$(IMAGE_PATH)
 
+sim:
+	qemu-system-riscv32 -M virt -bios none -kernel output/images/Image -append "rootwait root=/dev/vda ro"  -nographic -cpu rv32,mmu=off
+
 clean:
 	make $(BR2_OPTS) clean
 
@@ -39,13 +42,13 @@ docker_build:
 	docker build -t $(WILDCAT_IMAGE) .
 
 docker_edit: docker_build
-	$(call DOCKER_RUN,$(WILDCAT_IMAGE)) make edit
+	$(call DOCKER_RUN,$(WILDCAT_IMAGE)) edit
 
 docker_linux: docker_build
-	$(call DOCKER_RUN,$(WILDCAT_IMAGE)) make edit_linux
+	$(call DOCKER_RUN,$(WILDCAT_IMAGE)) edit_linux
 
 docker_build_fw: docker_build
-	$(call DOCKER_RUN, $(WILDCAT_IMAGE)) make build
+	$(call DOCKER_RUN, $(WILDCAT_IMAGE)) build
 
 docker_run:
 	$(call DOCKER_RUN,$(SBT_IMAGE)) make run
