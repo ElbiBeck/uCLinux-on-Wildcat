@@ -7,11 +7,12 @@ SECTIONS
 
     .text.start : { *(.text.start) }
 
-    . = ALIGN(0x1000);
-    .dtb        : { *(.dtb) }
+    . = ALIGN(16);
+    .dtb : { *(.dtb) }
 
-    . = ALIGN(0x1000);
-    .payload    : { *(.payload) }
+    /* Image MUST start exactly at CONFIG_PHYS_RAM_BASE */
+    . = 0x80400000;
+    .payload : { *(.payload) }
 
-    .bss : { *(.bss) }
+    .bss (NOLOAD) : { *(.bss) }
 }
