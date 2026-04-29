@@ -10,9 +10,9 @@
         bootargs = "earlycon=ns16550a,mmio,0x10000000 console=ttyS0 debug";
     };
 
-    memory@80400000 {
+    memory@80000000 {
         device_type = "memory";
-        reg = <0x80400000 0x01c00000>;      /* 8 MB at 0x80000000 */
+        reg = <0x80000000 0x03000000>;      /* 48 MB at 0x80000000 */
     };
 
     cpus {
