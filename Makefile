@@ -3,7 +3,13 @@ SBT_IMAGE      := sbtscala/scala-sbt:graalvm-community-21.0.2_1.12.9_3.8.3
 VOLUME         := buildroot-output
 BR2_OPTS       := -C buildroot/ O=output
 WILDCAT        := -C wildcat/
-IMAGE_PATH     := ../output/images/boot.bin
+OUTPUT_DIR     := ./output
+BUILD_OUTPUT   := buildroot/output/images
+
+BINARY         := boot.bin
+ELF            := boot.elf
+IMAGE          := Image
+
 
 DOCKER_RUN = docker run -it \
 	-v $(CURDIR):/app \
@@ -26,12 +32,16 @@ edit_linux:
 build:
 	make $(BR2_OPTS) defconfig BR2_DEFCONFIG=../configs/wildcat_defconfig
 	make $(BR2_OPTS)
+	mkdir -p $(OUTPUT_DIR)
+	cp $(BUILD_OUTPUT)/$(BINARY) $(OUTPUT_DIR)
+	cp $(BUILD_OUTPUT)/$(ELF) $(OUTPUT_DIR)
+	cp $(BUILD_OUTPUT)/$(IMAGE) $(OUTPUT_DIR)
 
 run:
-	make $(WILDCAT) run PROGRAM=$(IMAGE_PATH)
+	make $(WILDCAT) run PROGRAM=.$(OUTPUT_DIR)/$(BINARY)
 
 sim:
-	qemu-system-riscv32 -M virt -bios none -kernel output/images/Image -append "rootwait root=/dev/vda ro"  -nographic -cpu rv32,mmu=off
+	qemu-system-riscv32 -M virt -bios none -kernel $(OUTPUT_DIR)/$(IMAGE) -append "rootwait root=/dev/vda ro"  -nographic -cpu rv32,mmu=off
 
 clean:
 	make $(BR2_OPTS) clean
