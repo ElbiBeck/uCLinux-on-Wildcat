@@ -14,7 +14,7 @@ cd "$BINARIES_DIR"
 ${CROSS}as -march=rv32i -mabi=ilp32 \
     -I "$BINARIES_DIR" \
     -o "$BINARIES_DIR/start.o" \
-    "$BOARD_DIR/start.S"
+    "$BOARD_DIR/start.asm"
 
 ${CROSS}ld -T "$BOARD_DIR/boot.ld" \
     -o "$BINARIES_DIR/boot.elf" \

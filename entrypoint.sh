@@ -14,6 +14,6 @@ make -C /build "$@"
 # Sync back configs that may have changed
 rsync -a /build/configs/ /app/configs/
 if [ -d /build/buildroot/output/images ]; then
-  mkdir -p /app/output/images
-  rsync -a /build/buildroot/output/images/ /app/output/images/
+  mkdir -p /app/output
+  rsync -a /build/buildroot/output/images/ /app/output
 fi
