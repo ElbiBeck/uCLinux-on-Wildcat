@@ -11,6 +11,27 @@ DOCKER_RUN = docker run -it \
 	-w /app \
  $(1)
 
+all: help
+
+help:
+	@echo "Available commands:"
+	@echo ""
+	@echo "Native commands:"
+	@echo "  make edit           - Open Buildroot menuconfig"
+	@echo "  make edit_linux     - Open Linux kernel menuconfig"
+	@echo "  make build          - Build the Linux image"
+	@echo "  make run            - Run image in Wildcat simulator"
+	@echo "  make sim            - Run image in QEMU"
+	@echo "  make clean          - Clean Buildroot output"
+	@echo ""
+	@echo "Docker commands:"
+	@echo "  make docker_build      - Build Docker image"
+	@echo "  make docker_edit       - Run Buildroot menuconfig in Docker"
+	@echo "  make docker_linux      - Run Linux menuconfig in Docker"
+	@echo "  make docker_build_fw   - Build firmware in Docker"
+	@echo "  make docker_run        - Run Wildcat simulator in Docker"
+	@echo "  make docker_clean      - Clean build output in Docker"
+	@echo "  make docker_distclean  - Remove Docker build volume"
 # Native
 
 edit:
