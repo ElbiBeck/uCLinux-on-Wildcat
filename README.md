@@ -77,3 +77,10 @@ make docker_run        # Run Wildcat simulator in Docker
 make docker_clean      # Clean build output in Docker
 make docker_distclean  # Remove Docker build volume
 ```
+
+---
+
+## Compilation Benchmarks
+(Run a full build then make clean and build again to avoid downloads in the benchmark)
+Nikolaj M4 - 10/06/2026
+make docker_build_fw  1.15s user 2.02s system 0% cpu 13:59.63 total
