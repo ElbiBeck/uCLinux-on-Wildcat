@@ -6,8 +6,6 @@ WILDCAT        := -C wildcat/
 OUTPUT_DIR     := ./output
 BUILD_OUTPUT   := buildroot/output/images
 
-BINARY         := boot.bin
-ELF            := boot.elf
 IMAGE          := Image
 
 
@@ -37,10 +35,11 @@ help:
 	@echo "  make docker_linux      - Run Linux menuconfig in Docker"
 	@echo "  make docker_build_fw   - Build firmware in Docker"
 	@echo "  make docker_run        - Run Wildcat simulator in Docker"
+	@echo "  make docker_shell      - Open an interactive shell in the container"
 	@echo "  make docker_clean      - Clean build output in Docker"
 	@echo "  make docker_distclean  - Remove Docker build volume"
-# Native
 
+# Native
 edit:
 	$(MAKE) $(BR2_OPTS) defconfig BR2_DEFCONFIG=../configs/wildcat_defconfig
 	$(MAKE) $(BR2_OPTS) menuconfig
@@ -55,15 +54,13 @@ build:
 	$(MAKE) $(BR2_OPTS) defconfig BR2_DEFCONFIG=../configs/wildcat_defconfig
 	$(MAKE) $(BR2_OPTS)
 	mkdir -p $(OUTPUT_DIR)
-	cp $(BUILD_OUTPUT)/$(BINARY) $(OUTPUT_DIR)
-	cp $(BUILD_OUTPUT)/$(ELF) $(OUTPUT_DIR)
-	cp $(BUILD_OUTPUT)/$(IMAGE) $(OUTPUT_DIR)
+	cp $(BUILD_OUTPUT)/$(IMAGE) $(OUTPUT_DIR)/$(IMAGE).bin
 
 run:
-	$(MAKE) $(WILDCAT) run PROGRAM=$(abspath $(OUTPUT_DIR)/$(BINARY))
+	$(MAKE) $(WILDCAT) run PROGRAM=$(abspath $(OUTPUT_DIR)/$(IMAGE).bin)
 
 sim:
-	qemu-system-riscv32 -M virt -bios none -kernel $(OUTPUT_DIR)/$(IMAGE) -append "rootwait root=/dev/vda ro"  -nographic -cpu rv32,mmu=off
+	qemu-system-riscv32 -M virt -bios none -kernel $(OUTPUT_DIR)/$(IMAGE).bin -append "rootwait root=/dev/vda ro"  -nographic -cpu rv32,mmu=off
 
 clean:
 	$(MAKE) $(BR2_OPTS) clean
@@ -85,6 +82,14 @@ docker_build_fw: docker_build
 docker_run:
 	$(call DOCKER_RUN,$(SBT_IMAGE)) make run
 
+docker_shell: docker_build
+	docker run -it --rm \
+		-v $(CURDIR):/app \
+		-v $(VOLUME):/build \
+		-w /build \
+		--entrypoint /bin/bash \
+		$(WILDCAT_IMAGE) -c 'rsync -a --exclude=buildroot/output --exclude=output /app/ /build/; exec bash'
+
 docker_clean: docker_build
 	$(call DOCKER_RUN,$(WILDCAT_IMAGE)) clean
 
@@ -93,4 +98,4 @@ docker_distclean:
 	docker volume rm -f $(VOLUME)
 
 .PHONY: edit edit_linux build run sim clean \
-        docker_build docker_edit docker_linux docker_build_fw docker_run docker_clean docker_distclean
+        docker_build docker_edit docker_linux docker_build_fw docker_run docker_shell docker_clean docker_distclean
