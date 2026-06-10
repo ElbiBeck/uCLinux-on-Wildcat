@@ -7,7 +7,7 @@ RUN apt-get update && apt-get upgrade -y && apt-get install -y \
 
 RUN mkdir -p /build
 
-COPY entrypoint.sh /entrypoint.sh
+COPY configs/entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
 WORKDIR /app
