@@ -57,7 +57,7 @@ build:
 	cp $(BUILD_OUTPUT)/$(IMAGE) $(OUTPUT_DIR)/$(IMAGE).bin
 
 run:
-	$(MAKE) $(WILDCAT) run PROGRAM=$(abspath $(OUTPUT_DIR)/$(IMAGE).bin)
+	$(MAKE) $(WILDCAT) linux PROGRAM=$(abspath $(OUTPUT_DIR)/$(IMAGE).bin)
 
 sim:
 	qemu-system-riscv32 -M virt -bios none -kernel $(OUTPUT_DIR)/$(IMAGE).bin -append "rootwait root=/dev/vda ro"  -nographic -cpu rv32,mmu=off
