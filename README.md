@@ -9,7 +9,7 @@ _Project 5: uCLinux on Wildcat_
 ## Demo
 
 <p align="center">
-  <img src="boot.gif" alt="μClinux booting on the Wildcat simulator" width="720">
+  <img src="terminal.gif" alt="μClinux booting on the Wildcat simulator" width="720">
 </p>
 
 ## Getting Started
