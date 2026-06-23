@@ -59,6 +59,14 @@ make build && make run
 ```bash
 make docker_build_fw && make docker_run
 ```
+Once the image is built it can be run natively on macOS using `make run`
+
+#### 3.1 Login
+
+Login to the default user using root
+```bash
+wildcat login: root
+```
 
 ## Command Reference
 
@@ -66,10 +74,10 @@ make docker_build_fw && make docker_run
 
 | Command | Description |
 | --- | --- |
+| `make run` | Run the image in the Wildcat simulator |
 | `make edit` | Open Buildroot menuconfig |
 | `make edit_linux` | Open Linux kernel menuconfig |
 | `make build` | Build the Linux image |
-| `make run` | Run the image in the Wildcat simulator |
 | `make sim` | Run the image in QEMU |
 | `make clean` | Clean the Buildroot output |
 
@@ -77,21 +85,24 @@ make docker_build_fw && make docker_run
 
 | Command | Description |
 | --- | --- |
+| `make docker_run` | Run the Wildcat simulator in Docker |
 | `make docker_build` | Build the Docker image |
 | `make docker_edit` | Open Buildroot menuconfig in Docker |
 | `make docker_linux` | Open Linux kernel menuconfig in Docker |
 | `make docker_build_fw` | Build the firmware in Docker |
-| `make docker_run` | Run the Wildcat simulator in Docker |
 | `make docker_clean` | Clean build output in Docker |
 | `make docker_distclean` | Remove the Docker build volume |
 
-## Compilation Benchmarks
+## Compilation Time Examples
 
 > For a clean measurement, run a full build once, then `make clean` and rebuild so that package downloads aren't counted in the timing.
 
-| Machine | Date | Command | Wall time | User | System |
-| --- | --- | --- | --- | --- | --- |
-| Apple M4 (Nikolaj) | 2026-06-10 | `make docker_build_fw` | 13:59.63 | 1.15s | 2.02s |
+| Machine | Operating System | Date | Command | Time |
+| --- | --- | --- | --- | --- |
+| Apple M4 | MacOS | 2026-06-23 | `make docker_build_fw` | 13:01.53 |
+| AMD Ryzen 5 7640U | Ubuntu 24.04 | 2026-06-23 | `make build` | 19:02.03 |
+| Intel i5-1135G7 @ 2.40GHz | Windows (WSL-Ubuntu) | 2026-06-23 | `make build` | 43:42.86 |
+| GitHub Actions Pipeline (With downloads) | Ubuntu | 2026-06-15 | `make build` | 34:50 |
 
 ## Project Status
 
