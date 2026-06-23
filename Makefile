@@ -6,13 +6,6 @@ WILDCAT        := -C wildcat/
 OUTPUT_DIR     := output
 BUILD_OUTPUT   := buildroot/output/images
 
-PRG_COMPILER   := buildroot/output/host/bin/riscv32-buildroot-linux-uclibc-gcc
-PRG_COMP_FLAGS := -fPIC -Wl,-elf2flt=-r
-PRG_SRC_DIR := programs
-PRG_OUT_DIR := output/rootfs_overlay/programs
-PRG_SRCS := $(wildcard $(PRG_SRC_DIR)/*.c)
-PRG_BINS := $(patsubst $(PRG_SRC_DIR)/%.c,$(PRG_OUT_DIR)/%,$(PRG_SRCS))
-
 IMAGE          := Image
 
 DOCKER_RUN = docker run \
@@ -56,10 +49,9 @@ edit_linux:
 	$(MAKE) $(BR2_OPTS) linux-menuconfig
 	$(MAKE) $(BR2_OPTS) linux-update-defconfig
 
-build: prog
+build:
 	mkdir -p $(OUTPUT_DIR)/rootfs_overlay/etc
 	cp configs/issue $(OUTPUT_DIR)/rootfs_overlay/etc/
-
 
 	$(MAKE) $(BR2_OPTS) defconfig BR2_DEFCONFIG=../configs/wildcat_defconfig
 	$(MAKE) $(BR2_OPTS)
@@ -76,15 +68,6 @@ sim:
 clean:
 	$(MAKE) $(BR2_OPTS) clean
 	rm -rf $(OUTPUT_DIR)/*
-
-# Compile and add custom programs
-
-prog:
-	mkdir -p $(PRG_OUT_DIR)
-	for src in $(PRG_SRCS) ; do \
-		$(PRG_COMPILER) $(PRG_COMP_FLAGS) $$src -o $(PRG_OUT_DIR)/$$(basename $$src .c) ; \
-	done
-	rm -f $(PRG_OUT_DIR)/*.gdb
 
 # Docker wrappers
 
