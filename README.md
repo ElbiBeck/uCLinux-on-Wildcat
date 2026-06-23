@@ -102,7 +102,7 @@ wildcat login: root
 | Apple M4 | MacOS | 2026-06-23 | `make docker_build_fw` | 13:01.53 |
 | AMD Ryzen 5 7640U | Ubuntu 24.04 | 2026-06-23 | `make build` | 19:02.03 |
 | Intel i5-1135G7 @ 2.40GHz | Windows (WSL-Ubuntu) | 2026-06-23 | `make build` | 43:42.86 |
-| GitHub Actions Pipeline (With downloads) | Ubuntu | 2026-06-15 | `make build` | 43:6 |
+| GitHub Actions Pipeline (With downloads) | Ubuntu | 2026-06-15 | `make build` | 34:50 |
 
 ## Project Status
 
